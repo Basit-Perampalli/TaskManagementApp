@@ -32,7 +32,7 @@ const TaskForm = ({ onAddTask, isEditing, onEditTask, selectedTask, setSelectedT
             onAddTask(task);
             toast.success('Task added successfully!');
         }
-
+        
     
         clearFields();
     };
