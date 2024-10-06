@@ -13,7 +13,7 @@ const NavBar = () => {
                 </Typography>
                 <Box display="flex" alignItems="center">
                     <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
-                        <Button color="inherit" component={Link} to="/add-task">
+                        <Button color="inherit" onClick={()=>{setSelectedTask(null);setIsEditing(false)}} component={Link} to="/add-task">
                             Add Task
                         </Button>
                     </motion.div>

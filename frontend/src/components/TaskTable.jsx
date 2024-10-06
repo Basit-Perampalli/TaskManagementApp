@@ -19,12 +19,12 @@ const TaskTable = ({ tasks, onEdit, onDelete, onToggleComplete }) => {
 
     return (
         <>
-            <TableContainer component={Paper} sx={{ boxShadow: '0px 4px 20px rgba(0, 0, 0, 0.1)', borderRadius: 2, marginTop: 4 }}>
+            <TableContainer component={Paper} sx={{ boxShadow: '0px 4px 20px rgba(0, 0, 0, 0.1)', borderRadius: 2, marginTop: 4,height:'73vh' }}>
                 <Table>
                     <TableHead sx={{ backgroundColor: '#1e3c72' }}>
                         <TableRow>
                             <TableCell sx={{ color: '#fff', fontWeight: 'bold' }}>Task Title</TableCell>
-                            <TableCell sx={{ color: '#fff', fontWeight: 'bold' }}>Description</TableCell>
+                            {/* <TableCell sx={{ color: '#fff', fontWeight: 'bold' }}>Description</TableCell> */}
                             <TableCell sx={{ color: '#fff', fontWeight: 'bold' }}>Priority</TableCell>
                             <TableCell sx={{ color: '#fff', fontWeight: 'bold' }}>Due Date</TableCell>
                             <TableCell sx={{ color: '#fff', fontWeight: 'bold' }}>Status</TableCell>
@@ -43,9 +43,9 @@ const TaskTable = ({ tasks, onEdit, onDelete, onToggleComplete }) => {
                                 onClick={() => handleRowClick(task)}
                             >
                                 <TableCell>{task.title}</TableCell>
-                                <TableCell>{task.description}</TableCell>
+                                {/* <TableCell>{task.description}</TableCell> */}
                                 <TableCell>{task.priority}</TableCell>
-                                <TableCell>{task.dueDate}</TableCell>
+                                <TableCell>{task.due_date.slice(0,10)}</TableCell>
                                 <TableCell>{task.completed ? 'Completed' : 'Incomplete'}</TableCell>
                                 <TableCell onClick={(e) => e.stopPropagation()}>
                                     <Box display="flex" justifyContent="space-between" alignItems="center">
@@ -83,7 +83,7 @@ const TaskTable = ({ tasks, onEdit, onDelete, onToggleComplete }) => {
                                         </motion.div>
                                         <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                                             <Button
-                                                onClick={() => onToggleComplete(task.id)}
+                                                onClick={() => onToggleComplete(task)}
                                                 variant="contained"
                                                 sx={{
                                                     backgroundColor: task.completed ? '#2e7d32' : '#43a047',

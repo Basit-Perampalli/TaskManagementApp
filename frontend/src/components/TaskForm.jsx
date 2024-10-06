@@ -4,7 +4,7 @@ import { TextField, Button, MenuItem, Typography, Box, Select, InputLabel, FormC
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-const TaskForm = ({ onAddTask, isEditing, onEditTask, selectedTask, setSelectedTask, setIsEditing }) => {
+const TaskForm = ({ isEditing, onEditTask, selectedTask, setSelectedTask, setIsEditing }) => {
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
     const [priority, setPriority] = useState('Medium');
@@ -16,26 +16,60 @@ const TaskForm = ({ onAddTask, isEditing, onEditTask, selectedTask, setSelectedT
             setTitle(selectedTask.title);
             setDescription(selectedTask.description);
             setPriority(selectedTask.priority);
-            setDueDate(selectedTask.dueDate);
+            setDueDate(selectedTask.due_date.slice(0,10));
         }
     }, [isEditing, selectedTask]);
 
     
-    const handleSubmit = (e) => {
+    const handleSubmit = async(e) => {
         e.preventDefault();
-        const task = { title, description, priority, dueDate };
+        const task = { title, description, priority, due_date:dueDate };
 
         if (isEditing) {
             onEditTask({ ...selectedTask, ...task });
             toast.success('Task edited successfully!');
-        } else {
-            onAddTask(task);
-            toast.success('Task added successfully!');
-        }
-        
+            console.log(selectedTask.id)
+            const response = await fetch(`http://localhost:8000/api/tasks/${selectedTask.id}/`, {
+                method: 'PUT',
+                headers: {
+                'Content-Type': 'application/json',
+                // 'Authorization': `Bearer ${token}`, 
+                },
+                body: JSON.stringify(task),
+            });
     
+            if (response.ok) {
+                const data = await response.json();
+                console.log('Task updated:', data);
+                toast.success('Task updated successfully!');
+            } else {
+                toast.error('Failed to update task');
+                console.log('Failed to update task:', response);
+            }
+            
+        } else {
+            const response = await fetch('http://localhost:8000/api/tasks/', {
+                method: 'POST',
+                headers: {
+                'Content-Type': 'application/json',
+                // 'Authorization': `Bearer ${token}`, 
+                },
+                body: JSON.stringify(task),
+            });
+    
+            if (response.ok) {
+                const data = await response.json();
+                console.log('Task created:', data);
+                toast.success('Task added successfully!');
+            } else {
+                toast.error('Failed to create task');
+                console.log('Failed to create task:', response);
+            }
+            
+        }
         clearFields();
     };
+
 
     
     const clearFields = () => {
