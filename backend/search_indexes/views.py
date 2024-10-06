@@ -9,7 +9,7 @@ from .documents import TaskDocument
 from .serializers import TaskDocumentSerializer
 
 class TaskPagination(PageNumberPagination):
-    page_size = 10
+    page_size = 7
 
 class TaskDocumentView(BaseDocumentViewSet):
     document = TaskDocument
