@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import TaskForm from './components/TaskForm';
@@ -7,32 +6,30 @@ import NavBar from './components/NavBar';
 import { motion } from 'framer-motion';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import './index.css'; 
-import TaskProgress from './pages/TaskProgress'; // Import TaskProgress component
+import './index.css';
+import TaskProgress from './pages/TaskProgress';
+import AdminRegi from './pages/Registration';  
+import Login from './pages/Login';           
 
 const App = () => {
     const [tasks, setTasks] = useState([]);
     const [selectedTask, setSelectedTask] = useState(null);
     const [isEditing, setIsEditing] = useState(false);
 
-    
     const handleAddTask = (task) => {
         setTasks([...tasks, { ...task, id: Date.now(), completed: false }]);
     };
 
-    
     const handleEditTask = (updatedTask) => {
         setTasks(tasks.map((task) => (task.id === updatedTask.id ? updatedTask : task)));
         setIsEditing(false);
         setSelectedTask(null);
     };
 
-
     const handleDeleteTask = (taskId) => {
         setTasks(tasks.filter((task) => task.id !== taskId));
     };
 
-    
     const handleToggleComplete = (taskId) => {
         setTasks(tasks.map((task) => (task.id === taskId ? { ...task, completed: !task.completed } : task)));
     };
@@ -72,13 +69,13 @@ const App = () => {
                                 />
                             }
                         />
-                        
                         <Route
                             path="/task-progress"
                             element={<TaskProgress totalTasks={tasks.length} completedTasks={tasks.filter(task => task.completed).length} />}
                         />
-                    
-                        <Route path="*" element={<Navigate to="/add-task" />} />
+                        <Route path="/register" element={<AdminRegi />} />
+                        <Route path="/login" element={<Login />} />
+                        <Route path="*" element={<Navigate to="/login" />} />
                     </Routes>
                 </motion.div>
                 <ToastContainer />
