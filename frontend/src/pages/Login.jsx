@@ -23,7 +23,7 @@ const AdminLogin = () => {
             .then(response => {
                 if (response.data.status) {
                     toast.success('Login Successful');
-                    navigate('/dashboard'); // Redirect to dashboard after successful login
+                    navigate('/add-task'); // Redirect to dashboard after successful login
                 } else {
                     toast.error(response.data.message || 'Login failed. Please try again.');
                 }
@@ -37,8 +37,8 @@ const AdminLogin = () => {
     return (
         <div style={styles.container}>
             <Box sx={styles.box}>
-                <Typography variant="h5" gutterBottom>
-                    Admin Login
+                <Typography variant="h5" gutterBottom style={{ marginTop: '20px' }}>
+                    Login
                 </Typography>
                 <form onSubmit={handleSubmit} style={styles.form}>
                     <Box sx={styles.inputGroup}>

@@ -37,7 +37,7 @@ const AdminRegi = () => {
     return (
         <div style={styles.container}>
             <Box sx={styles.box}>
-                <Typography variant="h5" gutterBottom style={{ color: '' }}>
+                <Typography variant="h5" gutterBottom style={{ marginTop: '20px' }}>
                     Registration
                 </Typography>
                 <form onSubmit={handleSubmit} style={styles.form}>
