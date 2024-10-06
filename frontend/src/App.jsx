@@ -16,43 +16,18 @@ const App = () => {
     const [selectedTask, setSelectedTask] = useState(null);
     const [isEditing, setIsEditing] = useState(false);
 
-<<<<<<< HEAD
     const handleAddTask = (task) => {
         setTasks([...tasks, { ...task, id: Date.now(), completed: false }]);
     };
 
-=======
-    
->>>>>>> 68efc0c1990407e067cfd3003b647aea186f8be7
     const handleEditTask = (updatedTask) => {
         setTasks(tasks.map((task) => (task.id === updatedTask.id ? updatedTask : task)));
         setIsEditing(false);
         setSelectedTask(null);
     };
 
-<<<<<<< HEAD
     const handleDeleteTask = (taskId) => {
-=======
-
-    const handleDeleteTask = async(taskId) => {
->>>>>>> 68efc0c1990407e067cfd3003b647aea186f8be7
         setTasks(tasks.filter((task) => task.id !== taskId));
-        const response = await fetch(`http://localhost:8000/api/tasks/${taskId}/`, {
-            method: 'DELETE',
-            headers: {
-            'Content-Type': 'application/json',
-            // 'Authorization': `Bearer ${token}`, 
-            }
-        });
-
-        if (response.ok) {
-            const data = await response.json();
-            console.log('Task deleted:', data);
-            toast.success('Task deleted successfully!');
-        } else {
-            toast.error('Failed to delete task');
-            console.log('Failed to delete task:', response);
-        }
     };
 
     const handleToggleComplete = (taskId) => {
@@ -62,13 +37,14 @@ const App = () => {
     return (
         <Router>
             <div style={{ backgroundColor: '#f0f2f5', minHeight: '100vh' }}>
-                <NavBar setSelectedTask={setSelectedTask} setIsEditing={setIsEditing}/>
+                <NavBar />
                 <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5 }}>
                     <Routes>
                         <Route
                             path="/add-task"
                             element={
                                 <TaskForm
+                                    onAddTask={handleAddTask}
                                     isEditing={isEditing}
                                     onEditTask={handleEditTask}
                                     selectedTask={selectedTask}
@@ -81,7 +57,6 @@ const App = () => {
                             path="/view-tasks"
                             element={
                                 <ViewTasks
-                                    setTasks={setTasks}
                                     tasks={tasks}
                                     onEditTask={(task) => {
                                         setSelectedTask(task);
