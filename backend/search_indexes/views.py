@@ -32,9 +32,5 @@ class TaskDocumentView(BaseDocumentViewSet):
         'due_date': 'due_date',
     }
     ordering_fields = {
-        'title': 'title.raw',
-        'description': 'description.raw',
         'due_date': 'due_date',
-        'created_at': 'created_at',
-        'updated_at': 'updated_at',
     }

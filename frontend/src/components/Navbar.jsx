@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { AppBar, Toolbar, Typography, Button, Box } from '@mui/material';
+import { AppBar, Toolbar, Typography, Button, Box, TextField } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 
@@ -23,11 +23,11 @@ const NavBar = () => {
                         </Button>
                     </motion.div>
                     
-                    <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
+                    {/* <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
                         <Button color="inherit" component={Link} to="/task-progress">
                             Task Completion
                         </Button>
-                    </motion.div>
+                    </motion.div> */}
                 </Box>
             </Toolbar>
         </AppBar>

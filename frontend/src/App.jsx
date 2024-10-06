@@ -14,6 +14,7 @@ const App = () => {
     const [tasks, setTasks] = useState([]);
     const [selectedTask, setSelectedTask] = useState(null);
     const [isEditing, setIsEditing] = useState(false);
+    
 
     
     const handleEditTask = (updatedTask) => {
@@ -44,8 +45,31 @@ const App = () => {
     };
 
     
-    const handleToggleComplete = (taskId) => {
-        setTasks(tasks.map((task) => (task.id === taskId ? { ...task, completed: !task.completed } : task)));
+    const handleToggleComplete = async(t) => {
+        const currTask = { ...t, status: !t.status }
+        setTasks(tasks.map((task) => (task.id === t.id ? { ...task, status: !task.status } : task)));
+        try {
+            const response = await fetch(`http://localhost:8000/api/tasks/${t.id}/`, {
+                method: 'PUT',
+                headers: {
+                'Content-Type': 'application/json',
+                // 'Authorization': `Bearer ${token}`, 
+                },
+                body: JSON.stringify(currTask),
+            });
+    
+            if (response.ok) {
+                const data = await response.json();
+                console.log('Task updated:', data);
+                // toast.success('Task updated successfully!');
+            } else {
+                // toast.error('Failed to update task');
+                console.log('Failed to update task:', response);
+            }
+        } catch (error) {
+            // toast.error('Failed to update task');
+            console.log('Failed to update task:', response);
+        }
     };
 
     return (
@@ -54,18 +78,6 @@ const App = () => {
                 <NavBar setSelectedTask={setSelectedTask} setIsEditing={setIsEditing}/>
                 <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5 }}>
                     <Routes>
-                        <Route
-                            path="/add-task"
-                            element={
-                                <TaskForm
-                                    isEditing={isEditing}
-                                    onEditTask={handleEditTask}
-                                    selectedTask={selectedTask}
-                                    setSelectedTask={setSelectedTask}
-                                    setIsEditing={setIsEditing}
-                                />
-                            }
-                        />
                         <Route
                             path="/view-tasks"
                             element={
@@ -83,13 +95,26 @@ const App = () => {
                                 />
                             }
                         />
-                        
                         <Route
+                            path="/add-task"
+                            element={
+                                <TaskForm
+                                    isEditing={isEditing}
+                                    onEditTask={handleEditTask}
+                                    selectedTask={selectedTask}
+                                    setSelectedTask={setSelectedTask}
+                                    setIsEditing={setIsEditing}
+                                />
+                            }
+                        />
+                        
+                        
+                        {/* <Route
                             path="/task-progress"
                             element={<TaskProgress totalTasks={tasks.length} completedTasks={tasks.filter(task => task.completed).length} />}
-                        />
+                        /> */}
                     
-                        <Route path="*" element={<Navigate to="/add-task" />} />
+                        <Route path="*" element={<Navigate to="/view-tasks" />} />
                     </Routes>
                 </motion.div>
                 <ToastContainer />

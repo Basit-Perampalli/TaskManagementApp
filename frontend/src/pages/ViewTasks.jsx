@@ -2,12 +2,13 @@
 import React, { useEffect, useState } from 'react';
 import TaskTable from '../components/TaskTable';
 import { useNavigate } from 'react-router-dom';
-import { Box, Container,Stack,Button } from '@mui/material';
+import { Box, Container,Stack,Button, Typography, TextField } from '@mui/material';
 
 const ViewTasks = ({ tasks,setTasks, onEditTask, onDeleteTask, onToggleComplete, setSelectedTask, setIsEditing }) => {
     const navigate = useNavigate();
     const [currPage,setCurrPage] = useState(1);
     const [pageCnt,setPageCnt] = useState(1);
+    const [search,setSearch] = useState(null);
     const handleEditClick = (task) => {
         setSelectedTask(task);      
         setIsEditing(true);         
@@ -16,12 +17,24 @@ const ViewTasks = ({ tasks,setTasks, onEditTask, onDeleteTask, onToggleComplete,
 
     const fetchTasks = async () => {
         try {
-          const response = await fetch(`http://127.0.0.1:8000/search/task/?page=${currPage}`, {
-              method: 'GET',
-              headers: {
-                  'Content-Type': 'application/json'
-              }
-          });
+          if (search){
+            console.log(search)
+            var response = await fetch(`http://127.0.0.1:8000/search/task/?page=${currPage}&title__contains=${search}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+          }
+          else{
+            var response = await fetch(`http://127.0.0.1:8000/search/task/?page=${currPage}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+          }
+          
     
           if (!response.ok) {
               toast.error('Internal server issue')
@@ -45,11 +58,27 @@ const ViewTasks = ({ tasks,setTasks, onEditTask, onDeleteTask, onToggleComplete,
 
     useEffect(()=>{
         fetchTasks()
-    },[currPage])
+    },[currPage,search])
 
 
     return (
         <Container>
+        <Box sx={{display:"flex",marginTop:"10px"}} justifyContent={'space-between'}>
+            <div>
+                
+            <Typography variant="h4" color="initial">Tasks</Typography>
+            </div>
+            <TextField
+                sx={{marginLeft:"55vh"}}
+                    fullWidth
+                  id="search"
+                  variant='standard'
+                  color='primary'
+                  label="Search"
+                  value={search}
+                  onChange={(e)=>{setSearch(e.target.value)}}
+                />
+        </Box>
         <TaskTable
             tasks={tasks}
             onEdit={handleEditClick}    
