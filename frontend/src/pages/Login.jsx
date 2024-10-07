@@ -23,7 +23,7 @@ const AdminLogin = ({ onLogin }) => {
 
         if (validUser) {
             toast.success('Login successful');
-            onLogin(); // Call the login handler from App.js
+            onLogin(); 
             navigate('/add-task'); 
         } else {
             toast.error('Invalid email or password');

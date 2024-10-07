@@ -31,7 +31,7 @@ const AdminRegi = () => {
         localStorage.setItem('users', JSON.stringify(users));
 
         toast.success('Registration successful. Please login.');
-        navigate('/'); // Redirect to login after successful registration
+        navigate('/'); 
     };
 
     return (
