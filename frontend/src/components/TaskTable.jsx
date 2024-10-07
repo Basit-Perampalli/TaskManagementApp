@@ -19,12 +19,15 @@ const TaskTable = ({ tasks, onEdit, onDelete, onToggleComplete }) => {
 
     return (
         <>
+<<<<<<< HEAD
+            <TableContainer component={Paper} sx={{ boxShadow: '0px 4px 20px rgba(0, 0, 0, 0.1)', borderRadius: 2, marginTop: 4, height: '73vh' }}>
+=======
             <TableContainer component={Paper} sx={{ boxShadow: '0px 4px 20px rgba(0, 0, 0, 0.1)', borderRadius: 2, marginTop: 1,height:'73vh' }}>
+>>>>>>> a32da2f151e03056401e7dbad325d3fe5c75880c
                 <Table>
                     <TableHead sx={{ backgroundColor: '#1e3c72' }}>
                         <TableRow>
                             <TableCell sx={{ color: '#fff', fontWeight: 'bold' }}>Task Title</TableCell>
-                            {/* <TableCell sx={{ color: '#fff', fontWeight: 'bold' }}>Description</TableCell> */}
                             <TableCell sx={{ color: '#fff', fontWeight: 'bold' }}>Priority</TableCell>
                             <TableCell sx={{ color: '#fff', fontWeight: 'bold' }}>Due Date</TableCell>
                             <TableCell sx={{ color: '#fff', fontWeight: 'bold' }}>Status</TableCell>
@@ -43,10 +46,14 @@ const TaskTable = ({ tasks, onEdit, onDelete, onToggleComplete }) => {
                                 onClick={() => handleRowClick(task)}
                             >
                                 <TableCell>{task.title}</TableCell>
-                                {/* <TableCell>{task.description}</TableCell> */}
                                 <TableCell>{task.priority}</TableCell>
+<<<<<<< HEAD
+                                <TableCell>{task.due_date.slice(0, 10)}</TableCell>
+                                <TableCell>{task.completed ? 'Completed' : 'Incomplete'}</TableCell>
+=======
                                 <TableCell>{task.due_date.slice(0,10)}</TableCell>
                                 <TableCell>{task.status ? 'Completed' : 'Incomplete'}</TableCell>
+>>>>>>> a32da2f151e03056401e7dbad325d3fe5c75880c
                                 <TableCell onClick={(e) => e.stopPropagation()}>
                                     <Box display="flex" justifyContent="space-between" alignItems="center">
                                         <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
@@ -83,7 +90,7 @@ const TaskTable = ({ tasks, onEdit, onDelete, onToggleComplete }) => {
                                         </motion.div>
                                         <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                                             <Button
-                                                onClick={() => onToggleComplete(task)}
+                                                onClick={() => onToggleComplete(task.id)} // Pass task ID here
                                                 variant="contained"
                                                 sx={{
                                                     width:"220px",

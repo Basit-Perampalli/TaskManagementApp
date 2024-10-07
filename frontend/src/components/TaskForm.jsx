@@ -33,7 +33,7 @@ const TaskForm = ({ isEditing, onEditTask, selectedTask, setSelectedTask, setIsE
                 method: 'PUT',
                 headers: {
                 'Content-Type': 'application/json',
-                // 'Authorization': `Bearer ${token}`, 
+                
                 },
                 body: JSON.stringify(task),
             });
@@ -52,7 +52,7 @@ const TaskForm = ({ isEditing, onEditTask, selectedTask, setSelectedTask, setIsE
                 method: 'POST',
                 headers: {
                 'Content-Type': 'application/json',
-                // 'Authorization': `Bearer ${token}`, 
+                
                 },
                 body: JSON.stringify(task),
             });

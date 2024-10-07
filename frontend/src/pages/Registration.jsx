@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { TextField, Button, Typography, Box } from '@mui/material';
 import { motion } from 'framer-motion';
 import { Link, useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -16,22 +15,23 @@ const AdminRegi = () => {
         e.preventDefault();
 
         if (!username || !email || !password) {
+            toast.error('Please fill in all fields');
             return;
         }
 
-        axios.post('Enter here registration api', { username, email, password })
-            .then(response => {
-                if (response.data.status) {
-                    toast.success('Registration Successful. Please Login');
-                    navigate('/');
-                } else {
-                    toast.error(response.data.message || 'Registration failed. Please try again.');
-                }
-            })
-            .catch(err => {
-                console.error(err);
-                toast.error('An error occurred. Please try again.');
-            });
+        const users = JSON.parse(localStorage.getItem('users')) || [];
+        const userExists = users.some(user => user.email === email);
+
+        if (userExists) {
+            toast.error('User already exists. Please login.');
+            return;
+        }
+
+        users.push({ username, email, password });
+        localStorage.setItem('users', JSON.stringify(users));
+
+        toast.success('Registration successful. Please login.');
+        navigate('/'); 
     };
 
     return (
@@ -74,7 +74,7 @@ const AdminRegi = () => {
                     </Box>
                     <div style={styles.signupPassword}>
                         <Typography>
-                            Have an Account? <Link to="/">Login</Link>
+                            Already have an account? <Link to="/">Login</Link>
                         </Typography>
                     </div>
                     <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
@@ -85,7 +85,7 @@ const AdminRegi = () => {
                             sx={{ mt: 2 }}
                             style={{ backgroundColor: '#1e3c72' }}
                         >
-                            Submit
+                            Register
                         </Button>
                     </motion.div>
                 </form>
@@ -110,12 +110,11 @@ const styles = {
         maxWidth: '400px',
         width: '100%',
         textAlign: 'center',
-        Height: '40px'
     },
     form: {
         display: 'flex',
         flexDirection: 'column',
-        padding: '20px'
+        padding: '20px',
     },
     inputGroup: {
         marginBottom: '20px',
@@ -124,10 +123,6 @@ const styles = {
         display: 'flex',
         alignItems: 'center',
         marginBottom: '10px',
-    },
-    icon: {
-        marginRight: '10px',
-        color: 'gray',
     },
     signupPassword: {
         display: 'flex',
