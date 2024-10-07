@@ -1,14 +1,16 @@
 
-import React, { useState } from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { useState } from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import TaskForm from './components/TaskForm';
 import ViewTasks from './pages/ViewTasks';
-import NavBar from './components/NavBar';
+// import NavBar from './components/NavBar';
 import { motion } from 'framer-motion';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import './index.css'; 
+import './index.css';
 import TaskProgress from './pages/TaskProgress'; // Import TaskProgress component
+import AdminLogin from './pages/Login';
+import AdminRegi from './pages/Registration';
 
 const App = () => {
     const [tasks, setTasks] = useState([]);
@@ -23,25 +25,8 @@ const App = () => {
         setSelectedTask(null);
     };
 
-
-    const handleDeleteTask = async(taskId) => {
+    const handleDeleteTask = (taskId) => {
         setTasks(tasks.filter((task) => task.id !== taskId));
-        const response = await fetch(`http://localhost:8000/api/tasks/${taskId}/`, {
-            method: 'DELETE',
-            headers: {
-            'Content-Type': 'application/json',
-            // 'Authorization': `Bearer ${token}`, 
-            }
-        });
-
-        if (response.ok) {
-            const data = await response.json();
-            console.log('Task deleted:', data);
-            toast.success('Task deleted successfully!');
-        } else {
-            toast.error('Failed to delete task');
-            console.log('Failed to delete task:', response);
-        }
     };
 
     
@@ -75,14 +60,13 @@ const App = () => {
     return (
         <Router>
             <div style={{ backgroundColor: '#f0f2f5', minHeight: '100vh' }}>
-                <NavBar setSelectedTask={setSelectedTask} setIsEditing={setIsEditing}/>
+
                 <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5 }}>
                     <Routes>
                         <Route
                             path="/view-tasks"
                             element={
                                 <ViewTasks
-                                    setTasks={setTasks}
                                     tasks={tasks}
                                     onEditTask={(task) => {
                                         setSelectedTask(task);
@@ -111,10 +95,11 @@ const App = () => {
                         
                         {/* <Route
                             path="/task-progress"
-                            element={<TaskProgress totalTasks={tasks.length} completedTasks={tasks.filter(task => task.completed).length} />}
-                        /> */}
-                    
-                        <Route path="*" element={<Navigate to="/view-tasks" />} />
+                            element={<TaskProgress totalTasks={tasks.length} completedTasks={tasks.filter(task => task.completed).length} />*/}
+                        
+
+                        <Route path="/" element={<AdminLogin />} />
+                        <Route path="/registration" element={<AdminRegi />} />
                     </Routes>
                 </motion.div>
                 <ToastContainer />
