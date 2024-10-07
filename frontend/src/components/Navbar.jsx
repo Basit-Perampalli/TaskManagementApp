@@ -1,6 +1,10 @@
 // src/components/NavBar.js
 import React from 'react';
+<<<<<<< HEAD
 import { AppBar, Toolbar, Typography, Box, Button } from '@mui/material';
+=======
+import { AppBar, Toolbar, Typography, Button, Box, TextField } from '@mui/material';
+>>>>>>> a32da2f151e03056401e7dbad325d3fe5c75880c
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 
@@ -22,7 +26,12 @@ const NavBar = ({ onLogout }) => {
                             View Tasks
                         </Button>
                     </motion.div>
+<<<<<<< HEAD
                     <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
+=======
+                    
+                    {/* <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
+>>>>>>> a32da2f151e03056401e7dbad325d3fe5c75880c
                         <Button color="inherit" component={Link} to="/task-progress">
                             Task Progress
                         </Button>
@@ -31,7 +40,7 @@ const NavBar = ({ onLogout }) => {
                         <Button color="inherit" onClick={onLogout}>
                             Logout
                         </Button>
-                    </motion.div>
+                    </motion.div> */}
                 </Box>
             </Toolbar>
         </AppBar>

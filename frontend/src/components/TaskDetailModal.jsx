@@ -105,7 +105,7 @@ const TaskDetailModal = ({ task, open, handleClose }) => {
                                     Due Date:
                                 </Typography>
                                 <Typography variant="body1" sx={{ ml: 1 }}>
-                                    {task.dueDate}
+                                    {task.due_date.slice(0,10)}
                                 </Typography>
                             </Grid>
 
