@@ -1,12 +1,17 @@
 import React, { useState } from 'react';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button, Box } from '@mui/material';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button, Box, MenuItem, Select, InputLabel, FormControl } from '@mui/material';
 import { motion } from 'framer-motion';
 import TaskDetailModal from './TaskDetailModal';
 
 const TaskTable = ({ tasks, onEdit, onDelete, onToggleComplete }) => {
     const [selectedTask, setSelectedTask] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    
 
+    const [priorityFilter, setPriorityFilter] = useState('');
+    const [statusFilter, setStatusFilter] = useState('');
+
+    
     const handleRowClick = (task) => {
         setSelectedTask(task);
         setIsModalOpen(true);
@@ -17,13 +22,50 @@ const TaskTable = ({ tasks, onEdit, onDelete, onToggleComplete }) => {
         setIsModalOpen(false);
     };
 
+    
+    const filteredTasks = tasks.filter(task => {
+        return (
+            (priorityFilter === '' || task.priority === priorityFilter) &&
+            (statusFilter === '' || (statusFilter === 'Completed' ? task.completed : !task.completed))
+        );
+    });
+
     return (
         <>
-<<<<<<< HEAD
+            
+            <Box display="flex" justifyContent="space-between" alignItems="center" my={2}>
+                <FormControl variant="outlined" sx={{ minWidth: 120 }}>
+                    <InputLabel id="priority-filter-label">Priority</InputLabel>
+                    <Select
+                        labelId="priority-filter-label"
+                        value={priorityFilter}
+                        onChange={(e) => setPriorityFilter(e.target.value)}
+                        label="Priority"
+                    >
+                        <MenuItem value="">All</MenuItem>
+                        <MenuItem value="High">High</MenuItem>
+                        <MenuItem value="Medium">Medium</MenuItem>
+                        <MenuItem value="Low">Low</MenuItem>
+                    </Select>
+                </FormControl>
+
+                <FormControl variant="outlined" sx={{ minWidth: 120 }}>
+                    <InputLabel id="status-filter-label">Status</InputLabel>
+                    <Select
+                        labelId="status-filter-label"
+                        value={statusFilter}
+                        onChange={(e) => setStatusFilter(e.target.value)}
+                        label="Status"
+                    >
+                        <MenuItem value="">All</MenuItem>
+                        <MenuItem value="Completed">Completed</MenuItem>
+                        <MenuItem value="Incomplete">Incomplete</MenuItem>
+                    </Select>
+                </FormControl>
+            </Box>
+
+            {/* Task Table */}
             <TableContainer component={Paper} sx={{ boxShadow: '0px 4px 20px rgba(0, 0, 0, 0.1)', borderRadius: 2, marginTop: 4, height: '73vh' }}>
-=======
-            <TableContainer component={Paper} sx={{ boxShadow: '0px 4px 20px rgba(0, 0, 0, 0.1)', borderRadius: 2, marginTop: 1,height:'73vh' }}>
->>>>>>> a32da2f151e03056401e7dbad325d3fe5c75880c
                 <Table>
                     <TableHead sx={{ backgroundColor: '#1e3c72' }}>
                         <TableRow>
@@ -35,25 +77,20 @@ const TaskTable = ({ tasks, onEdit, onDelete, onToggleComplete }) => {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {tasks.map((task, index) => (
+                        {filteredTasks.map((task, index) => (
                             <motion.tr
                                 key={task.id}
                                 initial={{ opacity: 0, x: -50 }}
                                 animate={{ opacity: 1, x: 0 }}
                                 transition={{ delay: index * 0.1 }}
-                                style={{ cursor: 'pointer', backgroundColor: task.status ? '#e0f7fa' : '#fff' }}
+                                style={{ cursor: 'pointer', backgroundColor: task.completed ? '#e0f7fa' : '#fff' }}
                                 whileHover={{ backgroundColor: '#f1f1f1' }}
                                 onClick={() => handleRowClick(task)}
                             >
                                 <TableCell>{task.title}</TableCell>
                                 <TableCell>{task.priority}</TableCell>
-<<<<<<< HEAD
                                 <TableCell>{task.due_date.slice(0, 10)}</TableCell>
                                 <TableCell>{task.completed ? 'Completed' : 'Incomplete'}</TableCell>
-=======
-                                <TableCell>{task.due_date.slice(0,10)}</TableCell>
-                                <TableCell>{task.status ? 'Completed' : 'Incomplete'}</TableCell>
->>>>>>> a32da2f151e03056401e7dbad325d3fe5c75880c
                                 <TableCell onClick={(e) => e.stopPropagation()}>
                                     <Box display="flex" justifyContent="space-between" alignItems="center">
                                         <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
@@ -93,15 +130,14 @@ const TaskTable = ({ tasks, onEdit, onDelete, onToggleComplete }) => {
                                                 onClick={() => onToggleComplete(task.id)} // Pass task ID here
                                                 variant="contained"
                                                 sx={{
-                                                    width:"220px",
-                                                    backgroundColor: task.status ? '#2e7d32' : '#43a047',
+                                                    backgroundColor: task.completed ? '#2e7d32' : '#43a047',
                                                     color: '#fff',
                                                     '&:hover': {
-                                                        backgroundColor: task.status ? '#1b5e20' : '#388e3c',
+                                                        backgroundColor: task.completed ? '#1b5e20' : '#388e3c',
                                                     },
                                                 }}
                                             >
-                                                {task.status ? 'Mark as Incomplete' : 'Mark as Done'}
+                                                {task.completed ? 'Mark as Incomplete' : 'Mark as Done'}
                                             </Button>
                                         </motion.div>
                                     </Box>
@@ -111,6 +147,8 @@ const TaskTable = ({ tasks, onEdit, onDelete, onToggleComplete }) => {
                     </TableBody>
                 </Table>
             </TableContainer>
+
+        
             <TaskDetailModal task={selectedTask} open={isModalOpen} handleClose={handleCloseModal} />
         </>
     );
