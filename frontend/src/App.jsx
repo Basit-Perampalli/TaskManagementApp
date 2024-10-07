@@ -63,11 +63,15 @@ const App = () => {
 
                 <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5 }}>
                     <Routes>
+                        <Route>
+                            
+                        </Route>
                         <Route
                             path="/view-tasks"
                             element={
                                 <ViewTasks
                                     tasks={tasks}
+                                    setTasks={setTasks}
                                     onEditTask={(task) => {
                                         setSelectedTask(task);
                                         setIsEditing(true);
