@@ -2,11 +2,10 @@ import { useState } from 'react';
 import { TextField, Button, Typography, Box } from '@mui/material';
 import { motion } from 'framer-motion';
 import { Link, useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-const AdminLogin = () => {
+const AdminLogin = ({ onLogin }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
@@ -19,19 +18,16 @@ const AdminLogin = () => {
             return;
         }
 
-        axios.post('Enter here Login api', { email, password })
-            .then(response => {
-                if (response.data.status) {
-                    toast.success('Login Successful');
-                    navigate('/add-task'); // Redirect to dashboard after successful login
-                } else {
-                    toast.error(response.data.message || 'Login failed. Please try again.');
-                }
-            })
-            .catch(err => {
-                console.error(err);
-                toast.error('An error occurred. Please try again.');
-            });
+        const users = JSON.parse(localStorage.getItem('users')) || [];
+        const validUser = users.find(user => user.email === email && user.password === password);
+
+        if (validUser) {
+            toast.success('Login successful');
+            onLogin(); // Call the login handler from App.js
+            navigate('/add-task'); 
+        } else {
+            toast.error('Invalid email or password');
+        }
     };
 
     return (
@@ -105,7 +101,7 @@ const styles = {
     form: {
         display: 'flex',
         flexDirection: 'column',
-        padding: '20px'
+        padding: '20px',
     },
     inputGroup: {
         marginBottom: '20px',

@@ -1,4 +1,4 @@
-
+// src/components/TaskCompletionChart.js
 import React from 'react';
 import { Doughnut } from 'react-chartjs-2';
 import { Box, Typography } from '@mui/material';
@@ -20,7 +20,6 @@ const TaskCompletionChart = ({ totalTasks, completedTasks }) => {
             },
         ],
     };
-
     const options = {
         cutout: '85%', // Creates the "gauge" style by cutting out the center
         rotation: -90, // Start the gauge at the bottom
