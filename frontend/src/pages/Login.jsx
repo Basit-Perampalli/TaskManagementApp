@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { TextField, Button, Typography, Box } from '@mui/material';
 import { motion } from 'framer-motion';
 import { Link, useNavigate } from 'react-router-dom';
@@ -10,24 +10,45 @@ const AdminLogin = ({ onLogin }) => {
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
 
-    const handleSubmit = (e) => {
+    useEffect(()=>{
+        const token = localStorage.getItem("accessToken")
+        if(token){
+            navigate('/view-tasks')
+        }
+    },[])
+
+    const handleSubmit = async(e) => {
         e.preventDefault();
 
         if (!email || !password) {
             toast.error('Both fields are required');
             return;
         }
-
-        const users = JSON.parse(localStorage.getItem('users')) || [];
-        const validUser = users.find(user => user.email === email && user.password === password);
-
-        if (validUser) {
-            toast.success('Login successful');
-            onLogin(); 
-            navigate('/add-task'); 
-        } else {
-            toast.error('Invalid email or password');
-        }
+        try {
+            const response = await fetch("http://localhost:8000/auth/login/", {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({email,password}),
+            });
+            console.log(response);
+            
+            if (!response.ok) {
+              const errorData = await response.json();
+              alert('Invalid Credentials', errorData);
+              return;
+            }
+        
+            const received_data = await response.json();
+            console.log('Registration successful:', received_data);
+            localStorage.setItem('accessToken', received_data.access);
+            localStorage.setItem('refreshToken', received_data.refresh);
+            props.setIsLogin(true)
+            navigate('/view-tasks')
+          } catch (error) {
+            console.error('Error during registration:', error);
+          }
     };
 
     return (

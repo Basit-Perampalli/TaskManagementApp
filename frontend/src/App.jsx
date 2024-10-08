@@ -35,14 +35,6 @@ const App = () => {
         setTasks(tasks.map((task) => (task.id === taskId ? { ...task, completed: !task.completed } : task)));
     };
 
-    const handleLogin = () => {
-        setIsAuthenticated(true);
-    };
-
-    const handleLogout = () => {
-        setIsAuthenticated(false);
-    };
-
     return (
         <Router>
             <div style={{ backgroundColor: '#f0f2f5', minHeight: '100vh' }}>
@@ -54,7 +46,7 @@ const App = () => {
                         </Route>
                         <Route
                             path="/add-task"
-                            element={isAuthenticated ? (
+                            element={
                                 <TaskForm
                                     onAddTask={handleAddTask}
                                     isEditing={isEditing}
@@ -62,12 +54,11 @@ const App = () => {
                                     selectedTask={selectedTask}
                                     setSelectedTask={setSelectedTask}
                                     setIsEditing={setIsEditing}
-                                />
-                            ) : <Navigate to="/" />}
+                                />}
                         />
                         <Route
                             path="/view-tasks"
-                            element={isAuthenticated ? (
+                            element={
                                 <ViewTasks
                                     tasks={tasks}
                                     setTasks={setTasks}
@@ -79,21 +70,19 @@ const App = () => {
                                     onToggleComplete={handleToggleComplete}
                                     setSelectedTask={setSelectedTask}
                                     setIsEditing={setIsEditing}
-                                />
-                            ) : <Navigate to="/" />}
+                                />}
                         />
                         <Route
                             path="/task-progress"
-                            element={isAuthenticated ? (
-                                <TaskProgress totalTasks={tasks.length} completedTasks={tasks.filter(task => task.completed).length} />
-                            ) : <Navigate to="/" />}
+                            element={
+                                <TaskProgress totalTasks={tasks.length} completedTasks={tasks.filter(task => task.completed).length} />}
                         />
                         <Route
                             path="/"
-                            element={<AdminLogin onLogin={handleLogin} />}
+                            element={<AdminLogin/>}
                         />
                         <Route path="/registration" element={<AdminRegi />} />
-                        <Route path="*" element={<Navigate to="/" />} />
+                        {/* <Route path="*" element={<Navigate to="/" />} /> */}
                     </Routes>
                 </motion.div>
                 <ToastContainer />

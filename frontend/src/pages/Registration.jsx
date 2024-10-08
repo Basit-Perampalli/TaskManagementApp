@@ -11,27 +11,46 @@ const AdminRegi = () => {
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async(e) => {
         e.preventDefault();
+
+        useEffect(()=>{
+            const token = localStorage.getItem("accessToken")
+            if(token){
+                navigate('/view-tasks')
+            }
+        },[])
 
         if (!username || !email || !password) {
             toast.error('Please fill in all fields');
             return;
         }
-
-        const users = JSON.parse(localStorage.getItem('users')) || [];
-        const userExists = users.some(user => user.email === email);
-
-        if (userExists) {
-            toast.error('User already exists. Please login.');
-            return;
-        }
-
-        users.push({ username, email, password });
-        localStorage.setItem('users', JSON.stringify(users));
-
-        toast.success('Registration successful. Please login.');
-        navigate('/'); 
+        try {
+            const response = await fetch("http://localhost:8000/auth/register/", {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({email,"first_name":username,"last_name":username,password}),
+            });
+        
+            if (!response.ok) {
+              const errorData = await response.json();
+              alert('User already Exist', response.status);
+              return;
+            }
+        
+            const received_data = await response.json();
+            console.log('Registration successful:', received_data);
+            localStorage.setItem('accessToken', received_data.access);
+            localStorage.setItem('refreshToken', received_data.refresh);
+            console.log(localStorage.getItem('accessToken'));
+            
+            navigate('/view-tasks')
+            props.setIsLogin(true)
+          } catch (error) {
+            alert('Error during registration:', error);
+          }
     };
 
     return (
