@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import TaskForm from './components/TaskForm';
 import ViewTasks from './pages/ViewTasks';
-// import NavBar from './components/NavBar';
+import NavBar from './components/NavBar';
 import { motion } from 'framer-motion';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';

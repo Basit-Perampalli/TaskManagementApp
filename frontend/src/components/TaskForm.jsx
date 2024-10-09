@@ -1,16 +1,16 @@
-
+// src/components/TaskForm.js
 import React, { useEffect, useState } from 'react';
 import { TextField, Button, MenuItem, Typography, Box, Select, InputLabel, FormControl } from '@mui/material';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-const TaskForm = ({ isEditing, onEditTask, selectedTask, setSelectedTask, setIsEditing }) => {
+const TaskForm = ({ isEditing, onEditTask, selectedTask, setSelectedTask, setIsEditing, onAddTask }) => {
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
     const [priority, setPriority] = useState('Medium');
     const [dueDate, setDueDate] = useState('');
 
-    
+    // Populate form fields when editing
     useEffect(() => {
         if (isEditing && selectedTask) {
             setTitle(selectedTask.title);
@@ -20,7 +20,6 @@ const TaskForm = ({ isEditing, onEditTask, selectedTask, setSelectedTask, setIsE
         }
     }, [isEditing, selectedTask]);
 
-    
     const handleSubmit = async(e) => {
         e.preventDefault();
         const task = { title, description, priority, due_date:dueDate };
@@ -28,50 +27,13 @@ const TaskForm = ({ isEditing, onEditTask, selectedTask, setSelectedTask, setIsE
         if (isEditing) {
             onEditTask({ ...selectedTask, ...task });
             toast.success('Task edited successfully!');
-            console.log(selectedTask.id)
-            const response = await fetch(`http://localhost:8000/api/tasks/${selectedTask.id}/`, {
-                method: 'PUT',
-                headers: {
-                'Content-Type': 'application/json',
-                
-                },
-                body: JSON.stringify(task),
-            });
-    
-            if (response.ok) {
-                const data = await response.json();
-                console.log('Task updated:', data);
-                toast.success('Task updated successfully!');
-            } else {
-                toast.error('Failed to update task');
-                console.log('Failed to update task:', response);
-            }
-            
         } else {
-            const response = await fetch('http://localhost:8000/api/tasks/', {
-                method: 'POST',
-                headers: {
-                'Content-Type': 'application/json',
-                
-                },
-                body: JSON.stringify(task),
-            });
-    
-            if (response.ok) {
-                const data = await response.json();
-                console.log('Task created:', data);
-                toast.success('Task added successfully!');
-            } else {
-                toast.error('Failed to create task');
-                console.log('Failed to create task:', response);
-            }
-            
+            onAddTask(task);
+            toast.success('Task added successfully!');
         }
         clearFields();
     };
 
-
-    
     const clearFields = () => {
         setTitle('');
         setDescription('');
@@ -141,40 +103,39 @@ const TaskForm = ({ isEditing, onEditTask, selectedTask, setSelectedTask, setIsE
                 required
                 fullWidth
             />
-<Button
-    type="submit"
-    variant="contained"
-    size="large"
-    sx={{
-        backgroundColor: '#1e3c72',
-        color: '#fff',
-        '&:hover': {
-            backgroundColor: '#162a54', 
-        },
-        transition: 'background-color 0.3s ease',
-        boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)', 
-    }}
->
-    {isEditing ? 'Update Task' : 'Add Task'}
-</Button>
+            <Button
+                type="submit"
+                variant="contained"
+                size="large"
+                sx={{
+                    backgroundColor: '#1e3c72',
+                    color: '#fff',
+                    '&:hover': {
+                        backgroundColor: '#162a54', 
+                    },
+                    transition: 'background-color 0.3s ease',
+                    boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)', 
+                }}
+            >
+                {isEditing ? 'Update Task' : 'Add Task'}
+            </Button>
 
-<Button
-    variant="outlined"
-    size="large"
-    onClick={clearFields}
-    sx={{
-        color: '#1e3c72', 
-        borderColor: '#1e3c72', 
-        '&:hover': {
-            backgroundColor: 'rgba(30, 60, 114, 0.1)', 
-            borderColor: '#162a54', 
-        },
-        transition: 'background-color 0.3s ease, border-color 0.3s ease',
-    }}
->
-    Clear Fields
-</Button>
-
+            <Button
+                variant="outlined"
+                size="large"
+                onClick={clearFields}
+                sx={{
+                    color: '#1e3c72', 
+                    borderColor: '#1e3c72', 
+                    '&:hover': {
+                        backgroundColor: 'rgba(30, 60, 114, 0.1)', 
+                        borderColor: '#162a54', 
+                    },
+                    transition: 'background-color 0.3s ease, border-color 0.3s ease',
+                }}
+            >
+                Clear Fields
+            </Button>
         </Box>
     );
 };
