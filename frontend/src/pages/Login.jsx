@@ -5,7 +5,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-const AdminLogin = ({ onLogin }) => {
+const AdminLogin = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
@@ -17,8 +17,7 @@ const AdminLogin = ({ onLogin }) => {
         }
     },[])
 
-    const handleSubmit = async(e) => {
-        e.preventDefault();
+    const handleSubmit = async() => {
 
         if (!email || !password) {
             toast.error('Both fields are required');
@@ -44,7 +43,6 @@ const AdminLogin = ({ onLogin }) => {
             console.log('Registration successful:', received_data);
             localStorage.setItem('accessToken', received_data.access);
             localStorage.setItem('refreshToken', received_data.refresh);
-            props.setIsLogin(true)
             navigate('/view-tasks')
           } catch (error) {
             console.error('Error during registration:', error);
@@ -88,7 +86,7 @@ const AdminLogin = ({ onLogin }) => {
                     <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
                         <Button
                             variant="contained"
-                            type="submit"
+                            onClick={handleSubmit}
                             fullWidth
                             sx={{ mt: 2 }}
                             style={{ backgroundColor: '#1e3c72' }}

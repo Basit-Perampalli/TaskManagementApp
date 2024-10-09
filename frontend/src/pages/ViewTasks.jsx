@@ -4,12 +4,13 @@ import TaskTable from '../components/TaskTable';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { Box, Container,Stack,Button, Typography, TextField } from '@mui/material';
+import NavBar from '../components/Navbar';
 
 const ViewTasks = ({ tasks,setTasks, onEditTask, onDeleteTask, onToggleComplete, setSelectedTask, setIsEditing }) => {
     const navigate = useNavigate();
     const [currPage,setCurrPage] = useState(1);
     const [pageCnt,setPageCnt] = useState(1);
-    const [search,setSearch] = useState(null);
+    const [search,setSearch] = useState(undefined);
     const handleEditClick = (task) => {
         setSelectedTask(task);      
         setIsEditing(true);         
@@ -17,6 +18,7 @@ const ViewTasks = ({ tasks,setTasks, onEditTask, onDeleteTask, onToggleComplete,
     };
 
     const fetchTasks = async () => {
+        console.log(currPage,search)
         try {
           if (search){
             console.log(search)
@@ -63,6 +65,8 @@ const ViewTasks = ({ tasks,setTasks, onEditTask, onDeleteTask, onToggleComplete,
 
 
     return (
+        <Box>
+        <NavBar/>
         <Container>
         <Box sx={{display:"flex",marginTop:"10px"}} justifyContent={'space-between'}>
             <div>
@@ -71,14 +75,14 @@ const ViewTasks = ({ tasks,setTasks, onEditTask, onDeleteTask, onToggleComplete,
             </div>
             <TextField
                 sx={{marginLeft:"55vh"}}
-                    fullWidth
-                  id="search"
-                  variant='standard'
-                  color='primary'
-                  label="Search"
-                  value={search}
+                fullWidth
+                id="search"
+                variant='standard'
+                color='primary'
+                label="Search"
+                value={search}
                   onChange={(e)=>{setSearch(e.target.value)}}
-                />
+                  />
         </Box>
         <TaskTable
             tasks={tasks}
@@ -95,6 +99,7 @@ const ViewTasks = ({ tasks,setTasks, onEditTask, onDeleteTask, onToggleComplete,
             </Button>
         </Box>
         </Container>
+    </Box>
     );
 };
 
