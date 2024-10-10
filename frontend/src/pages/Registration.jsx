@@ -1,25 +1,36 @@
-import { useState } from 'react';
+import { useContext, useState,useEffect } from 'react';
 import { TextField, Button, Typography, Box } from '@mui/material';
 import { motion } from 'framer-motion';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { AuthContext } from '../context/AuthContext';
 
 const AdminRegi = () => {
     const [username, setUsername] = useState('');
+    const [lastname, setLastname] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
+    const {getnewtoken} = useContext(AuthContext)
+
+    useEffect(()=>{
+        var token = localStorage.getItem("refreshToken")
+        if(token){
+            token = getnewtoken(token)
+            if(token.access){
+                navigate('/view-tasks')
+            }
+            else{
+                localStorage.removeItem("refreshToken")
+            }
+        }
+    },[])
+
 
     const handleSubmit = async(e) => {
         e.preventDefault();
 
-        useEffect(()=>{
-            const token = localStorage.getItem("accessToken")
-            if(token){
-                navigate('/view-tasks')
-            }
-        },[])
 
         if (!username || !email || !password) {
             toast.error('Please fill in all fields');
@@ -31,7 +42,7 @@ const AdminRegi = () => {
               headers: {
                 'Content-Type': 'application/json',
               },
-              body: JSON.stringify({email,"first_name":username,"last_name":username,password}),
+              body: JSON.stringify({email,"first_name":username,"last_name":lastname,password}),
             });
         
             if (!response.ok) {
@@ -47,7 +58,6 @@ const AdminRegi = () => {
             console.log(localStorage.getItem('accessToken'));
             
             navigate('/view-tasks')
-            props.setIsLogin(true)
           } catch (error) {
             alert('Error during registration:', error);
           }
@@ -64,9 +74,18 @@ const AdminRegi = () => {
                         <Box sx={styles.inputField}>
                             <TextField
                                 variant="outlined"
-                                label="Name"
+                                label="First name"
                                 value={username}
                                 onChange={(e) => setUsername(e.target.value)}
+                                fullWidth
+                            />
+                        </Box>
+                        <Box sx={styles.inputField}>
+                            <TextField
+                                variant="outlined"
+                                label="Last name"
+                                value={lastname}
+                                onChange={(e) => setLastname(e.target.value)}
                                 fullWidth
                             />
                         </Box>

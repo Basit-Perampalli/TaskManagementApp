@@ -10,6 +10,7 @@ from .serializers import TaskSerializer
 @permission_classes([IsAuthenticated])
 def getUserTasks(request):
     user = request.user
+    print(user)
     user_tasks = Task.objects.filter(author=user)
     serializer = TaskSerializer(user_tasks, many=True)
     return Response(serializer.data, status=status.HTTP_200_OK)

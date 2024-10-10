@@ -1,15 +1,17 @@
 // src/components/TaskForm.js
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { TextField, Button, MenuItem, Typography, Box, Select, InputLabel, FormControl } from '@mui/material';
 import Navbar from './Navbar';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { AuthContext } from '../context/AuthContext';
 
-const TaskForm = ({ isEditing, onEditTask, selectedTask, setSelectedTask, setIsEditing, onAddTask }) => {
+const TaskForm = ({ isEditing, selectedTask, setSelectedTask, setIsEditing }) => {
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
     const [priority, setPriority] = useState('Medium');
     const [dueDate, setDueDate] = useState('');
+    const {getnewtoken} = useContext(AuthContext)
 
     // Populate form fields when editing
     useEffect(() => {
@@ -18,19 +20,67 @@ const TaskForm = ({ isEditing, onEditTask, selectedTask, setSelectedTask, setIsE
             setDescription(selectedTask.description);
             setPriority(selectedTask.priority);
             setDueDate(selectedTask.due_date.slice(0,10));
+        }else{
+            clearFields()
         }
     }, [isEditing, selectedTask]);
 
     const handleSubmit = async(e) => {
         e.preventDefault();
         const task = { title, description, priority, due_date:dueDate };
+        var token = localStorage.getItem('refreshToken')
+        if (token){
+            token = await getnewtoken(token)
+        }else{
+            console.log('no token found')
+            localStorage.removeItem('refreshToken')
+            localStorage.removeItem('accessToken')
+            navigate('/')
+            return
+        }
 
         if (isEditing) {
-            onEditTask({ ...selectedTask, ...task });
-            toast.success('Task edited successfully!');
+            // toast.success('Task edited successfully!');
+            console.log(selectedTask.id)
+            const response = await fetch(`http://localhost:8000/task/update/${selectedTask.id}/`, {
+                method: 'PUT',
+                headers: {
+                'Content-Type': 'application/json',
+                'Authorization':   `Bearer ${token}`
+                },
+                body: JSON.stringify(task),
+            });
+    
+            if (response.ok) {
+                const data = await response.json();
+                console.log('Task updated:', data);
+                toast.success('Task updated successfully!');
+            } else {
+                toast.error('Failed to update task');
+                console.log('Failed to update task:', response);
+            }
+            setIsEditing(false);
+            setSelectedTask(null);
+            
         } else {
-            onAddTask(task);
-            toast.success('Task added successfully!');
+            const response = await fetch('http://localhost:8000/task/create/', {
+                method: 'POST',
+                headers: {
+                'Content-Type': 'application/json',
+                'Authorization':   `Bearer ${token}`
+                },
+                body: JSON.stringify(task),
+            });
+    
+            if (response.ok) {
+                const data = await response.json();
+                console.log('Task created:', data);
+                toast.success('Task added successfully!');
+            } else {
+                toast.error('Failed to create task');
+                console.log('Failed to create task:', response);
+            }
+            
         }
         clearFields();
     };
@@ -46,7 +96,7 @@ const TaskForm = ({ isEditing, onEditTask, selectedTask, setSelectedTask, setIsE
 
     return (
         <Box>
-            <Navbar/>
+        <Navbar setIsEditing={setIsEditing} setSelectedTask={setSelectedTask} />
         <Box
             component="form"
             onSubmit={handleSubmit}

@@ -40,6 +40,7 @@ class TaskDocument(Document):
     due_date = fields.DateField()
     created_at = fields.DateField()
     updated_at = fields.DateField()
+    author = fields.KeywordField(attr='author_indexing')
 
     class Django:
         model = Task  # The model associated with this document

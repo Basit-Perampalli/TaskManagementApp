@@ -11,9 +11,16 @@ const AdminLogin = () => {
     const navigate = useNavigate();
 
     useEffect(()=>{
-        const token = localStorage.getItem("accessToken")
+        var token = localStorage.getItem("refreshToken")
         if(token){
-            navigate('/view-tasks')
+            token = getnewtoken(token)
+            if(token.access){
+                navigate('/view-tasks')
+            }
+            else{
+                localStorage.removeItem("refreshToken")
+                localStorage.removeItem("accessToken")
+            }
         }
     },[])
 

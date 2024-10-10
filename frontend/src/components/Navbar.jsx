@@ -1,11 +1,10 @@
 // src/components/NavBar.js
 import React from 'react';
-import { AppBar, Toolbar, Typography, Button, Box, TextField,Avatar,IconButton,Tooltip,MenuItem,Menu } from '@mui/material';
+import { AppBar, Toolbar, Typography, Button, Box, Avatar,IconButton,Tooltip,MenuItem,Menu } from '@mui/material';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 
-const NavBar = ({ onLogout }) => {
-    const [anchorElNav, setAnchorElNav] = React.useState(null);
+const NavBar = ({setIsEditing,setSelectedTask }) => {
   const [anchorElUser, setAnchorElUser] = React.useState(null);
   const navigate = useNavigate();
     const handleOpenUserMenu = (event) => {
@@ -28,7 +27,7 @@ const NavBar = ({ onLogout }) => {
                 </Typography>
                 <Box display="flex" alignItems="center">
                     <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
-                        <Button color="inherit" component={Link} to="/add-task">
+                        <Button color="inherit" onClick={()=>{setIsEditing(false);setSelectedTask('')}} component={Link} to="/add-task">
                             Add Task
                         </Button>
                     </motion.div>

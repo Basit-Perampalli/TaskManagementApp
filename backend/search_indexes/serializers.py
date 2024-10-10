@@ -7,4 +7,5 @@ class TaskDocumentSerializer(DocumentSerializer):
 
     class Meta:
         document = TaskDocument
-        fields = '__all__'
+        fields = ['id', 'title', 'description','priority', 'status','due_date','author']
+        read_only_fields = ['id', 'author', 'created_at', 'updated_at']
