@@ -19,13 +19,20 @@ const ViewTasks = ({ tasks,setTasks, onEditTask, onDeleteTask, onToggleComplete,
 
     const fetchTasks = async () => {
         console.log(currPage,search)
+        const token = localStorage.getItem('accessToken')
+        if (!token){
+            console.log('no token found')
+            navigate('/')
+            return
+        }
         try {
           if (search){
             console.log(search)
             var response = await fetch(`http://127.0.0.1:8000/search/task/?page=${currPage}&title__contains=${search}`, {
                 method: 'GET',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    // 'Authorization':   `Bearer ${token}`
                 }
             });
           }

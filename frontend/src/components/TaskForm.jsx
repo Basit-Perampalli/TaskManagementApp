@@ -1,6 +1,7 @@
 // src/components/TaskForm.js
 import React, { useEffect, useState } from 'react';
 import { TextField, Button, MenuItem, Typography, Box, Select, InputLabel, FormControl } from '@mui/material';
+import Navbar from './Navbar';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -44,6 +45,8 @@ const TaskForm = ({ isEditing, onEditTask, selectedTask, setSelectedTask, setIsE
     };
 
     return (
+        <Box>
+            <Navbar/>
         <Box
             component="form"
             onSubmit={handleSubmit}
@@ -58,7 +61,7 @@ const TaskForm = ({ isEditing, onEditTask, selectedTask, setSelectedTask, setIsE
                 flexDirection: 'column',
                 gap: 2,
             }}
-        >
+            >
             <Typography variant="h5" gutterBottom sx={{ textAlign: 'center', fontWeight: '600' }}>
                 {isEditing ? 'Edit Task' : 'Add New Task'}
             </Typography>
@@ -69,7 +72,7 @@ const TaskForm = ({ isEditing, onEditTask, selectedTask, setSelectedTask, setIsE
                 variant="outlined"
                 required
                 fullWidth
-            />
+                />
             <TextField
                 label="Description"
                 value={description}
@@ -79,7 +82,7 @@ const TaskForm = ({ isEditing, onEditTask, selectedTask, setSelectedTask, setIsE
                 multiline
                 rows={4}
                 fullWidth
-            />
+                />
             <FormControl variant="outlined" required fullWidth>
                 <InputLabel id="priority-label">Priority</InputLabel>
                 <Select
@@ -102,7 +105,7 @@ const TaskForm = ({ isEditing, onEditTask, selectedTask, setSelectedTask, setIsE
                 InputLabelProps={{ shrink: true }}
                 required
                 fullWidth
-            />
+                />
             <Button
                 type="submit"
                 variant="contained"
@@ -116,7 +119,7 @@ const TaskForm = ({ isEditing, onEditTask, selectedTask, setSelectedTask, setIsE
                     transition: 'background-color 0.3s ease',
                     boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)', 
                 }}
-            >
+                >
                 {isEditing ? 'Update Task' : 'Add Task'}
             </Button>
 
@@ -133,9 +136,10 @@ const TaskForm = ({ isEditing, onEditTask, selectedTask, setSelectedTask, setIsE
                     },
                     transition: 'background-color 0.3s ease, border-color 0.3s ease',
                 }}
-            >
+                >
                 Clear Fields
             </Button>
+        </Box>
         </Box>
     );
 };
