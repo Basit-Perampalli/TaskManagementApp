@@ -2,7 +2,6 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
 from django.contrib.auth.models import User
-from django.contrib.auth.hashers import make_password
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.auth import authenticate
 
@@ -21,7 +20,7 @@ def register(request):
         last_name=data.get('last_name'),
         username=data.get('email'),
         email=data.get('email'),
-        password=make_password(data.get('password'))
+        password=data.get('password')
     )
 
     # Generate JWT tokens

@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 from pathlib import Path
 import os
 from dotenv import load_dotenv
+from datetime import timedelta
 
 load_dotenv()
 
@@ -61,6 +62,12 @@ REST_FRAMEWORK = {
     'ORDERING_PARAM': 'ordering',
 }
 
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=1),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
+}
+
+
 # Elasticsearch configuration
 ELASTICSEARCH_DSL = {
     'default': {
@@ -107,8 +114,8 @@ WSGI_APPLICATION = "backend.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql_psycopg2",
-        "NAME": os.getenv("DATABASE_NAME","postgres"),
-        "USER": os.getenv("DATABASE_USER","postgres"),
+        "NAME": os.getenv("DATABASE_NAME", "postgres"),
+        "USER": os.getenv("DATABASE_USER", "postgres"),
         "PASSWORD": os.getenv("PASSWORD"),
         "HOST": "localhost",
         "PORT": os.getenv("PORT", "5432"),
